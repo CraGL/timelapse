@@ -1,5 +1,10 @@
 INPUT_PATH_PREFIX = "rose_"
 OUTPUT_PATH_PREFIX = "rose_"
+#### These indices are the keyframe indices of the input sequence.
+KEYFRAME_INDICES=np.array([0,255,291,298,361,591,692,779,835,1024,1130,
+                              1142,1509,1753,1790,2037,2097,2101,2456,3116,
+                              3492,3576,3754,3981,4029,4051,4199,4219,4267,
+                              4574,4627,4685,4813,4894,4917,4968,4974])
 
 import cv2
 import numpy as np
@@ -26,13 +31,7 @@ def lerp_image(first,last,index,length,mask): #mask !=0 means common part.
     interpolation=np.uint8(first*(1.0-index*1.0/length)+last*(index*1.0/length)).clip(0,255)
     return interpolation
     
-    
-#### these index are keyframe index in the input sequence.    
-rose_keyframe_index=np.array([0,255,291,298,361,591,692,779,835,1024,1130,
-                              1142,1509,1753,1790,2037,2097,2101,2456,3116,
-                              3492,3576,3754,3981,4029,4051,4199,4219,4267,
-                              4574,4627,4685,4813,4894,4917,4968,4974])
-print rose_keyframe_index.shape
+print KEYFRAME_INDICES.shape
 
 
 capture=cv2.VideoCapture( INPUT_PATH_PREFIX + "subsequence_colorshift_%04d.png")
@@ -58,7 +57,7 @@ kernel2 = np.ones((3,3),np.uint8)
 
 recover_image_output_path=OUTPUT_PATH_PREFIX + "subsequence_movestd_movingmedian_recover"
 
-for index in range(1,rose_keyframe_index.shape[0]):
+for index in range(1,KEYFRAME_INDICES.shape[0]):
     
     retval1,mask=capture1.read()
     
@@ -73,10 +72,10 @@ for index in range(1,rose_keyframe_index.shape[0]):
     if nonzero_num<mask.shape[0]*mask.shape[1]:
  
         zero_num=firstframe2.shape[0]*firstframe2.shape[1]-nonzero_num
-        img=np.zeros((zero_num,rose_keyframe_index[index]-rose_keyframe_index[index-1]+kbuffersize+1,3),dtype=np.uint8)
+        img=np.zeros((zero_num,KEYFRAME_INDICES[index]-KEYFRAME_INDICES[index-1]+kbuffersize+1,3),dtype=np.uint8)
         temp=np.zeros((firstframe2.shape[0],firstframe2.shape[1],3),dtype=np.uint8)
 
-        for i in range(0,rose_keyframe_index[index]-rose_keyframe_index[index-1]+1):
+        for i in range(0,KEYFRAME_INDICES[index]-KEYFRAME_INDICES[index-1]+1):
             if i==0:
                 frame=firstframe
             if i>=1:
@@ -85,7 +84,7 @@ for index in range(1,rose_keyframe_index.shape[0]):
             img[:,i,:]=(frame_lab[mask==0]).reshape((zero_num,3))
             temp=frame_lab
 
-        for i in range(rose_keyframe_index[index]-rose_keyframe_index[index-1]+1,rose_keyframe_index[index]-rose_keyframe_index[index-1]+kbuffersize+1):
+        for i in range(KEYFRAME_INDICES[index]-KEYFRAME_INDICES[index-1]+1,KEYFRAME_INDICES[index]-KEYFRAME_INDICES[index-1]+kbuffersize+1):
             img[:,i,:]=(temp[mask==0]).reshape((zero_num,3))
 
         firstframe=cv2.cvtColor(temp,cv2.COLOR_LAB2BGR)
@@ -100,7 +99,7 @@ for index in range(1,rose_keyframe_index.shape[0]):
         stdevs_per_pixel = stdevs.sum( axis = 2 )/(stdevs.shape[2])
 
         highlighted_bad_pixels = img_RGB.copy()
-        badmask=np.zeros((zero_num,rose_keyframe_index[index]-rose_keyframe_index[index-1]+kbuffersize+1),dtype=np.uint8)
+        badmask=np.zeros((zero_num,KEYFRAME_INDICES[index]-KEYFRAME_INDICES[index-1]+kbuffersize+1),dtype=np.uint8)
 
         badmask[ stdevs_per_pixel > std_threshold] = 255
 
@@ -136,9 +135,9 @@ for index in range(1,rose_keyframe_index.shape[0]):
 
         _frame=np.zeros(firstframe.shape,dtype=np.uint8)
 
-        for i in range (0,rose_keyframe_index[index]-rose_keyframe_index[index-1]+kbuffersize+1):
+        for i in range (0,KEYFRAME_INDICES[index]-KEYFRAME_INDICES[index-1]+kbuffersize+1):
            
-            _frame=lerp_image(first_keyframe,last_keyframe,i,rose_keyframe_index[index]-rose_keyframe_index[index-1],frame_mask)
+            _frame=lerp_image(first_keyframe,last_keyframe,i,KEYFRAME_INDICES[index]-KEYFRAME_INDICES[index-1],frame_mask)
             _frame[frame_mask==0]=(recover_base[:,i,:]).reshape((zero_num,3))
             cv2.imwrite(recover_image_output_path+'{0:04}'.format(count)+".png",_frame)
             count=count+1
@@ -151,16 +150,16 @@ for index in range(1,rose_keyframe_index.shape[0]):
         
         _frame=np.zeros(firstframe.shape,dtype=np.uint8)
         frame_mask=mask
-        for i in range(0,rose_keyframe_index[index]-rose_keyframe_index[index-1]+1):
+        for i in range(0,KEYFRAME_INDICES[index]-KEYFRAME_INDICES[index-1]+1):
             if i==0:
                 frame=firstframe
             if i>=1:
                 retval,frame=capture.read()
             firstframe=frame
         
-        for i in range(0,rose_keyframe_index[index]-rose_keyframe_index[index-1]+1):
+        for i in range(0,KEYFRAME_INDICES[index]-KEYFRAME_INDICES[index-1]+1):
             
-            _frame=lerp_image(first_keyframe,last_keyframe,i,rose_keyframe_index[index]-rose_keyframe_index[index-1],frame_mask)
+            _frame=lerp_image(first_keyframe,last_keyframe,i,KEYFRAME_INDICES[index]-KEYFRAME_INDICES[index-1],frame_mask)
             cv2.imwrite(recover_image_output_path+'{0:04}'.format(count)+".png",_frame)
             count=count+1
             
