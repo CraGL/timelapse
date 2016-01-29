@@ -1,0 +1,2 @@
+## On Windows, don't put quotes.
+python timeunrotate.py --glob 'rose-timewise-320x480/*.png' rose-unrotate/rose

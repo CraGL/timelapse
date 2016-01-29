@@ -1,0 +1,42 @@
+{
+    "operations": 
+	[
+        {
+            "type": "KM_stroke_extraction",
+            "params": { 
+                         "source_name": "rose_albedo_%04d.png",
+						 "firstframe_path": "rose_albedo_0000.png",
+						 "threshold": 0.0,
+						 "frame_num": 5334,
+						 "final_replay_output_path": "rose_KM_replay_final.png",
+						 "KM_R_video_name": "rose_KM_R.avi",
+						 "KM_T_video_name": "rose_KM_T.avi",
+						 "KM_stroke_video_name": "rose_KM_stroke.avi",
+						 "KM_stroke_image_base_path": "rose_KM_stroke_",
+						 "width":  480,
+						 "height": 320,
+						 "FPS": 25.0,
+						 "R_gzfile_base_name": "rose_KM_R_",
+						 "T_gzfile_base_name": "rose_KM_T_"
+			          }
+        },
+		
+	    {
+		    "type": "PD_stroke_extraction",
+			"params": {
+                         "source_name": "rose_albedo_%04d.png",
+						 "firstframe_path": "rose_albedo_0000.png",
+						 "threshold": 0.0,
+						 "frame_num": 5334,
+						 "PD_paint_base_name":  "rose_PD_paint_",
+                         "PD_alpha_base_name":  "rose_PD_alpha_",
+						 "PD_stroke_base_name": "rose_PD_stroke_",
+						 "final_replay_output_path": "rose_PD_replay_final.png",
+						 "PD_stroke_video_name": "rose_PD_stroke.avi",
+						 "width":  480,
+						 "height": 320,
+						 "FPS": 25.0 	
+			          }
+		} 
+    ]
+}

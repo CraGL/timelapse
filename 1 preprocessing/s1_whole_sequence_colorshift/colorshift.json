@@ -1,0 +1,28 @@
+{
+    "operations":
+	[
+        {
+            "filter": "VideoReader",
+            "params": {
+			          "filename": "rose.mp4",
+		              "frameStop" : 5283,
+		              "frameStart" : 0
+			        }
+        },
+		
+	    {
+		    "filter": "ColorShift",
+			"params": {
+		                "Percent": 0.5,
+						"Threshold": 0.0
+			}
+		},
+		
+		{
+		    "filter": "VideoSaver",
+		    "params": {
+			          "filename": "rose_colorshift_"
+					  }
+		}
+    ]
+}

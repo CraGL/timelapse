@@ -1,0 +1,5 @@
+## The quotes around the thing with the * are important, because we want
+## python to interpret the *, not the shell.
+
+## On Windows, don't put quotes.
+python timerotate.py --glob 3200 --max-GB 2 'rose_subsequence_movestd_movingmedian_recover/*.png' rose-timewise/rose-timewise

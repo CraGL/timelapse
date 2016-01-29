@@ -1,0 +1,7 @@
+python l0smooth1Dsparse.py --lambda 1e-3 --kappa 1.1 --constraint-weight hard rose-timewise/rose-timewise-320x480-0000.png 1 rose-timewise/l0_1e-3_1.1_hard_rose-timewise-320x480-0000.png
+
+python l0smooth1Dsparse.py --lambda 1e-3 --kappa 1.1 --constraint-weight hard rose-timewise/rose-timewise-320x480-0001.png 1 rose-timewise/l0_1e-3_1.1_hard_rose-timewise-320x480-0001.png
+
+python l0smooth1Dsparse.py --lambda 1e-3 --kappa 1.1 --constraint-weight hard rose-timewise/rose-timewise-320x480-0002.png 1 rose-timewise/l0_1e-3_1.1_hard_rose-timewise-320x480-0002.png
+
+# ...

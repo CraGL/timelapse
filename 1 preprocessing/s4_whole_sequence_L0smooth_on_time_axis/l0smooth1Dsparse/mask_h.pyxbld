@@ -1,0 +1,6 @@
+## From: http://stackoverflow.com/questions/26833947/how-can-i-set-cython-compiler-flags-when-using-pyximport
+def make_ext(modname, pyxfilename):
+    from distutils.extension import Extension
+    return Extension(name=modname,
+                     sources=[pyxfilename],
+                     extra_compile_args=['-O3'])
